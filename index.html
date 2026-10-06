@@ -289,19 +289,58 @@
           <div class="panel-title">ELEVATOR<br>PANEL</div>
 
           <div class="nav-label">FLOORS</div>
-          <div class="nav-row">
-            <button class="nav-button active" data-section="Casino"><span class="nav-icon">C</span><span>Casino</span><span class="nav-count">6</span></button>
-            <button class="nav-button" data-section="Food"><span class="nav-icon">F</span><span>Food</span><span class="nav-count">6</span></button>
-            <button class="nav-button" data-section="Retail"><span class="nav-icon">R</span><span>Retail</span><span class="nav-count">6</span></button>
-            <button class="nav-button" data-section="Entertainment"><span class="nav-icon">E</span><span>Entertainment</span><span class="nav-count">6</span></button>
-          </div>
+<div class="nav-row">
+  <button class="nav-button active" data-section="Casino">
+    <span class="nav-icon">C</span>
+    <span>Casino</span>
+    <span class="nav-count" data-count-for="Casino"></span>
+  </button>
 
-          <div class="nav-label">TOWER</div>
-          <div class="nav-row">
-            <button class="nav-button" data-section="Elevators"><span class="nav-icon">↕</span><span>Elevators</span><span class="nav-count">8</span></button>
-            <button class="nav-button" data-section="Roofs"><span class="nav-icon">R</span><span>Roofs</span><span class="nav-count">8</span></button>
-            <button class="nav-button" data-section="Lobbies"><span class="nav-icon">L</span><span>Lobbies</span><span class="nav-count">8</span></button>
-          </div>
+  <button class="nav-button" data-section="Food">
+    <span class="nav-icon">F</span>
+    <span>Food</span>
+    <span class="nav-count" data-count-for="Food"></span>
+  </button>
+
+  <button class="nav-button" data-section="Retail">
+    <span class="nav-icon">R</span>
+    <span>Retail</span>
+    <span class="nav-count" data-count-for="Retail"></span>
+  </button>
+
+  <button class="nav-button" data-section="Entertainment">
+    <span class="nav-icon">E</span>
+    <span>Entertainment</span>
+    <span class="nav-count" data-count-for="Entertainment"></span>
+  </button>
+
+  <button class="nav-button" data-section="Suite">
+    <span class="nav-icon">S</span>
+    <span>Suites</span>
+    <span class="nav-count" data-count-for="Suite"></span>
+  </button>
+</div>
+
+<div class="nav-label">TOWER</div>
+<div class="nav-row">
+  <button class="nav-button" data-section="Elevators">
+    <span class="nav-icon">↕</span>
+    <span>Elevators</span>
+    <span class="nav-count" data-count-for="Elevators"></span>
+  </button>
+
+  <button class="nav-button" data-section="Roofs">
+    <span class="nav-icon">R</span>
+    <span>Roofs</span>
+    <span class="nav-count" data-count-for="Roofs"></span>
+  </button>
+
+  <button class="nav-button" data-section="Lobbies">
+    <span class="nav-icon">L</span>
+    <span>Lobbies</span>
+    <span class="nav-count" data-count-for="Lobbies"></span>
+  </button>
+</div>
 
           <div class="panel-tip">SELECT A FLOOR<br>TO VIEW DETAILS</div>
         </aside>
@@ -338,67 +377,21 @@
     </div>
   </div>
 
+<script src="data/catalog.js"></script>
+
   <script>
-    const floors = [
-      { name: '777 Slots', category: 'Casino' },
-      { name: 'Blackjack', category: 'Casino' },
-      { name: 'Craps', category: 'Casino' },
-      { name: 'High Roller', category: 'Casino' },
-      { name: 'Poker Room', category: 'Casino' },
-      { name: 'Roulette', category: 'Casino' },
-      { name: 'Burgers', category: 'Food' },
-      { name: 'Coffee House', category: 'Food' },
-      { name: 'Dessert Shop', category: 'Food' },
-      { name: 'Noodle Bar', category: 'Food' },
-      { name: 'Pizza Place', category: 'Food' },
-      { name: 'Steakhouse', category: 'Food' },
-      { name: 'Art Gallery', category: 'Retail' },
-      { name: 'Clothing Store', category: 'Retail' },
-      { name: 'Jewelry', category: 'Retail' },
-      { name: 'Souvenir Shop', category: 'Retail' },
-      { name: 'Tattoo, Ink', category: 'Retail' },
-      { name: 'Toy Store', category: 'Retail' },
-      { name: 'Abracadabra', category: 'Entertainment' },
-      { name: 'Aquatica Suite', category: 'Entertainment' },
-      { name: 'Lazer Lanes', category: 'Entertainment' },
-      { name: 'Movie Theater', category: 'Entertainment' },
-      { name: 'Nightclub', category: 'Entertainment' },
-      { name: 'Theater', category: 'Entertainment' },
-      { name: 'Classic Elevator', category: 'Elevators' },
-      { name: 'Crystal Elevator', category: 'Elevators' },
-      { name: 'Gold Elevator', category: 'Elevators' },
-      { name: 'Neon Elevator', category: 'Elevators' },
-      { name: 'Pink Elevator', category: 'Elevators' },
-      { name: 'Royal Elevator', category: 'Elevators' },
-      { name: 'Sky Elevator', category: 'Elevators' },
-      { name: 'Vegas Elevator', category: 'Elevators' },
-      { name: 'Casino Roof', category: 'Roofs' },
-      { name: 'Desert Roof', category: 'Roofs' },
-      { name: 'Neon Roof', category: 'Roofs' },
-      { name: 'Palace Roof', category: 'Roofs' },
-      { name: 'Resort Roof', category: 'Roofs' },
-      { name: 'Skyline Roof', category: 'Roofs' },
-      { name: 'Sunset Roof', category: 'Roofs' },
-      { name: 'Vegas Roof', category: 'Roofs' },
-      { name: 'Basic Lobby', category: 'Lobbies' },
-      { name: 'Casino Lobby', category: 'Lobbies' },
-      { name: 'Desert Lobby', category: 'Lobbies' },
-      { name: 'Grand Lobby', category: 'Lobbies' },
-      { name: 'Neon Lobby', category: 'Lobbies' },
-      { name: 'Royal Lobby', category: 'Lobbies' },
-      { name: 'Sunset Lobby', category: 'Lobbies' },
-      { name: 'Vegas Lobby', category: 'Lobbies' }
-    ];
+    const floors = window.catalogItems || [];
 
     const sectionDescriptions = {
-      Casino: 'Browse the bright side of the tower.',
-      Food: 'Grab a bite between elevator rides.',
-      Retail: 'Shop the tower\'s most colorful floors.',
-      Entertainment: 'Keep the tower buzzing after dark.',
-      Elevators: 'Every ride needs a signature look.',
-      Roofs: 'Top off your tower in style.',
-      Lobbies: 'Set the tone from the ground floor.'
-    };
+  Casino: 'Browse the bright side of the tower.',
+  Food: 'Grab a bite between elevator rides.',
+  Retail: 'Shop the tower\'s most colorful floors.',
+  Entertainment: 'Keep the tower buzzing after dark.',
+  Suite: 'Stay awhile above the bright lights.',
+  Elevators: 'Every ride needs a signature look.',
+  Roofs: 'Top off your tower in style.',
+  Lobbies: 'Set the tone from the ground floor.'
+};
 
     let activeSection = 'Casino';
     const grid = document.getElementById('floorGrid');
@@ -412,22 +405,40 @@
     const lightboxTitle = document.getElementById('lightboxTitle');
     const lightboxNote = document.getElementById('lightboxNote');
 
-    function imagePath(name) {
-      return `images/${name}.png`;
-    }
+    function imagePath(floor) {
+  return encodeURI(floor.image);
+}
+
+function updateNavCounts() {
+  document.querySelectorAll('[data-count-for]').forEach(element => {
+    const category = element.dataset.countFor;
+    const total = floors.filter(item => item.category === category).length;
+    element.textContent = total;
+  });
+}
 
     function render() {
       const query = search.value.trim().toLowerCase();
       const matches = floors.filter(floor => floor.category === activeSection && floor.name.toLowerCase().includes(query));
-      title.textContent = `${activeSection.toUpperCase()}${activeSection === 'Elevators' ? '' : ''}`;
-      if (activeSection !== 'Elevators' && activeSection !== 'Roofs' && activeSection !== 'Lobbies') title.textContent += ' FLOORS';
+      const sectionTitles = {
+  Casino: 'CASINO FLOORS',
+  Food: 'FOOD FLOORS',
+  Retail: 'RETAIL FLOORS',
+  Entertainment: 'ENTERTAINMENT FLOORS',
+  Suite: 'SUITES',
+  Elevators: 'ELEVATORS',
+  Roofs: 'ROOFS',
+  Lobbies: 'LOBBIES'
+};
+
+title.textContent = sectionTitles[activeSection] || activeSection.toUpperCase();
       subtitle.textContent = sectionDescriptions[activeSection];
       label.textContent = `${activeSection.toUpperCase()} CATALOG`;
       count.textContent = `${matches.length} ITEM${matches.length === 1 ? '' : 'S'}`;
       grid.innerHTML = '';
 
       if (!matches.length) {
-        grid.innerHTML = '<div class="empty">NO FLOORS MATCH THAT SEARCH.</div>';
+        grid.innerHTML = '<div class="empty">NO ITEMS MATCH THAT SEARCH.</div>';
         return;
       }
 
@@ -437,7 +448,7 @@
         card.innerHTML = `
           <button type="button" aria-label="View ${floor.name}">
             <div class="floor-art">
-              <img src="${imagePath(floor.name)}" alt="${floor.name} preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+              <img src="${imagePath(floor)}" alt="${floor.name} preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
               <div class="placeholder-art" style="display:none"><span>${floor.name.toUpperCase()}</span></div>
             </div>
             <div class="floor-info">
@@ -454,7 +465,7 @@
     function openLightbox(floor) {
       lightboxTitle.textContent = floor.name.toUpperCase();
       lightboxNote.textContent = `${floor.category} floor • 512 × 192 px source art`;
-      lightboxImage.src = imagePath(floor.name);
+      lightboxImage.src = imagePath(floor);
       lightboxImage.alt = `${floor.name} enlarged preview`;
       lightboxImage.onerror = () => {
         lightboxImage.removeAttribute('src');
@@ -481,6 +492,7 @@
     document.getElementById('closeLightbox').addEventListener('click', closeLightbox);
     lightbox.addEventListener('click', event => { if (event.target === lightbox) closeLightbox(); });
     document.addEventListener('keydown', event => { if (event.key === 'Escape') closeLightbox(); });
+    updateNavCounts();
     render();
   </script>
 </body>
