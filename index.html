@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tiny Tower Vegas — Tower UI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #171827;
+      --deep: #111326;
+      --navy: #3b355f;
+      --purple: #665375;
+      --cream: #f8edcf;
+      --paper: #fff8df;
+      --gold: #f5c84c;
+      --orange: #ee7544;
+      --pink: #e75b91;
+      --aqua: #55d6cf;
+      --green: #76c77a;
+      --muted: #a9a6b9;
+      --shadow: 5px 5px 0 var(--ink);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      background: #0d0f1b;
+      color: var(--cream);
+      font-family: VT323, monospace;
+      font-size: 22px;
+      image-rendering: pixelated;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    .game-window {
+      overflow: hidden;
+      border: 5px solid var(--ink);
+      background: #d9c7a3;
+      box-shadow: 8px 8px 0 #05060c;
+    }
+
+    .statusbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--navy);
+      border-bottom: 4px solid var(--ink);
+      color: var(--cream);
+    }
+    .statusbar .logo {
+      color: var(--gold);
+      text-align: center;
+      text-shadow: 3px 3px #8e3d4b;
+    }
+
+    .tower-layout {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      min-height: 760px;
+    }
+
+    .elevator-panel {
+      padding: 14px;
+      background: #f3e3b8;
+      border-right: 5px solid var(--ink);
+      color: var(--ink);
+    }
+    .panel-title {
+      margin: 2px 0 13px;
+      padding: 9px 7px;
+      background: var(--orange);
+      border: 4px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .nav-label {
+      margin: 22px 0 7px;
+      color: #77616a;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      letter-spacing: .3px;
+    }
+    .nav-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      margin: 8px 0;
+      padding: 9px 8px;
+      border: 3px solid var(--ink);
+      background: var(--paper);
+      color: var(--ink);
+      text-align: left;
+      box-shadow: 3px 3px 0 var(--ink);
+      line-height: 1.05;
+    }
+    .nav-button:hover { background: #fff1bd; }
+    .nav-button.active {
+      background: var(--gold);
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--ink);
+    }
+    .nav-icon {
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 28px;
+      height: 28px;
+      border: 2px solid var(--ink);
+      background: var(--aqua);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+    }
+    .nav-button.active .nav-icon { background: var(--pink); }
+    .nav-count { margin-left: auto; color: #77616a; font-size: 18px; }
+
+    .content {
+      min-width: 0;
+      padding: 22px;
+      background: #665375;
+    }
+    .content-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .content-title {
+      margin: 0;
+      color: var(--cream);
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(15px, 2vw, 23px);
+      line-height: 1.65;
+      text-shadow: 3px 3px var(--ink);
+    }
+    .content-subtitle { margin: 4px 0 0; color: #e1d5c4; }
+    .search {
+      min-width: min(330px, 100%);
+      padding: 10px 13px;
+      border: 3px solid var(--ink);
+      outline: 0;
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+    .search:focus { border-color: var(--gold); }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 12px 0;
+      color: var(--gold);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .result-count { color: var(--muted); font-family: VT323, monospace; font-size: 19px; }
+
+    .floor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 17px;
+    }
+    .floor-card {
+      overflow: hidden;
+      border: 4px solid var(--ink);
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .floor-card:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--ink); }
+    .floor-card button { display: block; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; text-align: left; }
+    .floor-art {
+      position: relative;
+      display: grid;
+      place-items: center;
+      aspect-ratio: 512 / 192;
+      overflow: hidden;
+      background: #3c4775;
+      border-bottom: 4px solid var(--ink);
+    }
+    .floor-art img { display: block; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+    .placeholder-art {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(#3c4775 0 40%, #eb8a54 40% 48%, #304d49 48% 100%);
+      color: var(--cream);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      text-align: center;
+      text-shadow: 2px 2px var(--ink);
+    }
+    .placeholder-art::before {
+      content: '';
+      position: absolute;
+      inset: 12% 8%;
+      border: 3px solid rgba(255,255,255,.45);
+      background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,220,122,.7) 18px 24px), repeating-linear-gradient(0deg, transparent 0 18px, rgba(255,220,122,.35) 18px 24px);
+    }
+    .placeholder-art span { position: relative; }
+    .floor-info { padding: 11px 12px 12px; }
+    .floor-name { margin: 0 0 5px; font-family: 'Press Start 2P', monospace; font-size: 10px; line-height: 1.55; }
+    .floor-type { color: #6d6170; font-size: 18px; }
+    .view-hint { float: right; color: #b24953; font-size: 17px; }
+
+    .empty { padding: 28px; border: 3px dashed var(--cream); color: var(--cream); text-align: center; }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(10, 11, 22, .88);
+    }
+    .lightbox.open { display: grid; }
+    .lightbox-card {
+      width: min(1000px, 100%);
+      border: 5px solid var(--ink);
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: 9px 9px 0 #05060c;
+    }
+    .lightbox-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 14px;
+      background: var(--navy);
+      color: var(--cream);
+    }
+    .lightbox-title { font-family: 'Press Start 2P', monospace; font-size: 13px; line-height: 1.5; }
+    .close {
+      padding: 4px 9px;
+      border: 3px solid var(--ink);
+      background: var(--pink);
+      color: var(--ink);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px;
+    }
+    .lightbox-body { padding: 15px; }
+    .lightbox-body img { display: block; width: 100%; height: auto; image-rendering: pixelated; border: 4px solid var(--ink); background: #3c4775; }
+    .lightbox-note { margin: 10px 0 0; color: #6d6170; }
+
+    @media (max-width: 780px) {
+      .app { padding: 10px; }
+      .tower-layout { grid-template-columns: 1fr; }
+      .elevator-panel { border-right: 0; border-bottom: 5px solid var(--ink); }
+      .nav-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .nav-button { margin: 0; }
+      .content { padding: 15px; }
+      .content-head { display: block; }
+      .search { width: 100%; margin-top: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="game-window">
+      <header class="statusbar">
+        <div class="logo pixel-title">TINY TOWER<br>VEGAS</div>
+      </header>
+
+      <div class="tower-layout">
+        <aside class="elevator-panel" aria-label="Tower navigation">
+          <div class="panel-title">ELEVATOR<br>PANEL</div>
+
+          <div class="nav-label">FLOORS</div>
+          <div class="nav-row">
+            <button class="nav-button active" data-section="Casino"><span class="nav-icon">C</span><span>Casino</span><span class="nav-count">6</span></button>
+            <button class="nav-button" data-section="Food"><span class="nav-icon">F</span><span>Food</span><span class="nav-count">6</span></button>
+            <button class="nav-button" data-section="Retail"><span class="nav-icon">R</span><span>Retail</span><span class="nav-count">6</span></button>
+            <button class="nav-button" data-section="Entertainment"><span class="nav-icon">E</span><span>Entertainment</span><span class="nav-count">6</span></button>
+          </div>
+
+          <div class="nav-label">TOWER</div>
+          <div class="nav-row">
+            <button class="nav-button" data-section="Elevators"><span class="nav-icon">↕</span><span>Elevators</span><span class="nav-count">8</span></button>
+            <button class="nav-button" data-section="Roofs"><span class="nav-icon">R</span><span>Roofs</span><span class="nav-count">8</span></button>
+            <button class="nav-button" data-section="Lobbies"><span class="nav-icon">L</span><span>Lobbies</span><span class="nav-count">8</span></button>
+          </div>
+
+          <div class="panel-tip">SELECT A FLOOR<br>TO VIEW DETAILS</div>
+        </aside>
+
+        <section class="content">
+          <div class="content-head">
+            <div>
+              <h1 class="content-title" id="contentTitle">CASINO FLOORS</h1>
+              <p class="content-subtitle" id="contentSubtitle">Browse the bright side of the tower.</p>
+            </div>
+            <input class="search" id="search" type="search" placeholder="Search floors..." aria-label="Search floors" />
+          </div>
+
+          <div class="section-heading">
+            <span id="sectionLabel">CASINO FLOOR CATALOG</span>
+            <span class="result-count" id="resultCount"></span>
+          </div>
+          <div class="floor-grid" id="floorGrid"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle">
+    <div class="lightbox-card">
+      <div class="lightbox-head">
+        <div class="lightbox-title" id="lightboxTitle">FLOOR PREVIEW</div>
+        <button class="close" id="closeLightbox" type="button">X</button>
+      </div>
+      <div class="lightbox-body">
+        <img id="lightboxImage" alt="" />
+        <p class="lightbox-note" id="lightboxNote"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const floors = [
+      { name: '777 Slots', category: 'Casino' },
+      { name: 'Blackjack', category: 'Casino' },
+      { name: 'Craps', category: 'Casino' },
+      { name: 'High Roller', category: 'Casino' },
+      { name: 'Poker Room', category: 'Casino' },
+      { name: 'Roulette', category: 'Casino' },
+      { name: 'Burgers', category: 'Food' },
+      { name: 'Coffee House', category: 'Food' },
+      { name: 'Dessert Shop', category: 'Food' },
+      { name: 'Noodle Bar', category: 'Food' },
+      { name: 'Pizza Place', category: 'Food' },
+      { name: 'Steakhouse', category: 'Food' },
+      { name: 'Art Gallery', category: 'Retail' },
+      { name: 'Clothing Store', category: 'Retail' },
+      { name: 'Jewelry', category: 'Retail' },
+      { name: 'Souvenir Shop', category: 'Retail' },
+      { name: 'Tattoo, Ink', category: 'Retail' },
+      { name: 'Toy Store', category: 'Retail' },
+      { name: 'Abracadabra', category: 'Entertainment' },
+      { name: 'Aquatica Suite', category: 'Entertainment' },
+      { name: 'Lazer Lanes', category: 'Entertainment' },
+      { name: 'Movie Theater', category: 'Entertainment' },
+      { name: 'Nightclub', category: 'Entertainment' },
+      { name: 'Theater', category: 'Entertainment' },
+      { name: 'Classic Elevator', category: 'Elevators' },
+      { name: 'Crystal Elevator', category: 'Elevators' },
+      { name: 'Gold Elevator', category: 'Elevators' },
+      { name: 'Neon Elevator', category: 'Elevators' },
+      { name: 'Pink Elevator', category: 'Elevators' },
+      { name: 'Royal Elevator', category: 'Elevators' },
+      { name: 'Sky Elevator', category: 'Elevators' },
+      { name: 'Vegas Elevator', category: 'Elevators' },
+      { name: 'Casino Roof', category: 'Roofs' },
+      { name: 'Desert Roof', category: 'Roofs' },
+      { name: 'Neon Roof', category: 'Roofs' },
+      { name: 'Palace Roof', category: 'Roofs' },
+      { name: 'Resort Roof', category: 'Roofs' },
+      { name: 'Skyline Roof', category: 'Roofs' },
+      { name: 'Sunset Roof', category: 'Roofs' },
+      { name: 'Vegas Roof', category: 'Roofs' },
+      { name: 'Basic Lobby', category: 'Lobbies' },
+      { name: 'Casino Lobby', category: 'Lobbies' },
+      { name: 'Desert Lobby', category: 'Lobbies' },
+      { name: 'Grand Lobby', category: 'Lobbies' },
+      { name: 'Neon Lobby', category: 'Lobbies' },
+      { name: 'Royal Lobby', category: 'Lobbies' },
+      { name: 'Sunset Lobby', category: 'Lobbies' },
+      { name: 'Vegas Lobby', category: 'Lobbies' }
+    ];
+
+    const sectionDescriptions = {
+      Casino: 'Browse the bright side of the tower.',
+      Food: 'Grab a bite between elevator rides.',
+      Retail: 'Shop the tower\'s most colorful floors.',
+      Entertainment: 'Keep the tower buzzing after dark.',
+      Elevators: 'Every ride needs a signature look.',
+      Roofs: 'Top off your tower in style.',
+      Lobbies: 'Set the tone from the ground floor.'
+    };
+
+    let activeSection = 'Casino';
+    const grid = document.getElementById('floorGrid');
+    const search = document.getElementById('search');
+    const title = document.getElementById('contentTitle');
+    const subtitle = document.getElementById('contentSubtitle');
+    const label = document.getElementById('sectionLabel');
+    const count = document.getElementById('resultCount');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxNote = document.getElementById('lightboxNote');
+
+    function imagePath(name) {
+      return `images/${name}.png`;
+    }
+
+    function render() {
+      const query = search.value.trim().toLowerCase();
+      const matches = floors.filter(floor => floor.category === activeSection && floor.name.toLowerCase().includes(query));
+      title.textContent = `${activeSection.toUpperCase()}${activeSection === 'Elevators' ? '' : ''}`;
+      if (activeSection !== 'Elevators' && activeSection !== 'Roofs' && activeSection !== 'Lobbies') title.textContent += ' FLOORS';
+      subtitle.textContent = sectionDescriptions[activeSection];
+      label.textContent = `${activeSection.toUpperCase()} CATALOG`;
+      count.textContent = `${matches.length} ITEM${matches.length === 1 ? '' : 'S'}`;
+      grid.innerHTML = '';
+
+      if (!matches.length) {
+        grid.innerHTML = '<div class="empty">NO FLOORS MATCH THAT SEARCH.</div>';
+        return;
+      }
+
+      matches.forEach(floor => {
+        const card = document.createElement('article');
+        card.className = 'floor-card';
+        card.innerHTML = `
+          <button type="button" aria-label="View ${floor.name}">
+            <div class="floor-art">
+              <img src="${imagePath(floor.name)}" alt="${floor.name} preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+              <div class="placeholder-art" style="display:none"><span>${floor.name.toUpperCase()}</span></div>
+            </div>
+            <div class="floor-info">
+              <h2 class="floor-name">${floor.name}</h2>
+              <span class="floor-type">${floor.category}</span>
+              <span class="view-hint">VIEW ›</span>
+            </div>
+          </button>`;
+        card.querySelector('button').addEventListener('click', () => openLightbox(floor));
+        grid.appendChild(card);
+      });
+    }
+
+    function openLightbox(floor) {
+      lightboxTitle.textContent = floor.name.toUpperCase();
+      lightboxNote.textContent = `${floor.category} floor • 512 × 192 px source art`;
+      lightboxImage.src = imagePath(floor.name);
+      lightboxImage.alt = `${floor.name} enlarged preview`;
+      lightboxImage.onerror = () => {
+        lightboxImage.removeAttribute('src');
+        lightboxImage.alt = `${floor.name} preview placeholder`;
+      };
+      lightbox.classList.add('open');
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+    }
+
+    document.querySelectorAll('.nav-button').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.nav-button').forEach(item => item.classList.remove('active'));
+        button.classList.add('active');
+        activeSection = button.dataset.section;
+        search.value = '';
+        render();
+      });
+    });
+
+    search.addEventListener('input', render);
+    document.getElementById('closeLightbox').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeLightbox(); });
+    render();
+  </script>
+</body>
+</html>
