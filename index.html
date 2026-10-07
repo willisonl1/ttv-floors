@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tiny Tower Vegas — Tower UI</title>
+  <title>Tiny Tower Vegas Floor List</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
@@ -24,30 +25,50 @@
       --shadow: 5px 5px 0 var(--ink);
     }
 
-    * { box-sizing: border-box; }
-    html, body { min-height: 100%; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
+      height: 100%;
       margin: 0;
       background: #0d0f1b;
       color: var(--cream);
       font-family: VT323, monospace;
       font-size: 22px;
       image-rendering: pixelated;
+      overflow: hidden;
+      /* Prevents whole page scrolling */
     }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
 
     .app {
-      max-width: 1360px;
-      margin: 0 auto;
-      padding: 22px;
+      width: 100%;
+      max-width: none;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      display: flex;
     }
 
     .game-window {
+      flex: 1;
+      display: flex;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       border: 5px solid var(--ink);
       background: #d9c7a3;
-      box-shadow: 8px 8px 0 #05060c;
+      box-shadow: none;
     }
 
     .statusbar {
@@ -59,6 +80,7 @@
       border-bottom: 4px solid var(--ink);
       color: var(--cream);
     }
+
     .statusbar .logo {
       color: var(--gold);
       text-align: center;
@@ -68,7 +90,8 @@
     .tower-layout {
       display: grid;
       grid-template-columns: 220px minmax(0, 1fr);
-      min-height: 760px;
+      width: 100%;
+      height: 100%;
     }
 
     .elevator-panel {
@@ -76,7 +99,9 @@
       background: #f3e3b8;
       border-right: 5px solid var(--ink);
       color: var(--ink);
+      overflow-y: auto;
     }
+
     .panel-title {
       margin: 2px 0 13px;
       padding: 9px 7px;
@@ -88,6 +113,7 @@
       line-height: 1.6;
       text-align: center;
     }
+
     .nav-label {
       margin: 22px 0 7px;
       color: #77616a;
@@ -95,6 +121,7 @@
       font-size: 9px;
       letter-spacing: .3px;
     }
+
     .nav-button {
       display: flex;
       align-items: center;
@@ -109,12 +136,17 @@
       box-shadow: 3px 3px 0 var(--ink);
       line-height: 1.05;
     }
-    .nav-button:hover { background: #fff1bd; }
+
+    .nav-button:hover {
+      background: #fff1bd;
+    }
+
     .nav-button.active {
       background: var(--gold);
       transform: translate(2px, 2px);
       box-shadow: 1px 1px 0 var(--ink);
     }
+
     .nav-icon {
       display: inline-grid;
       place-items: center;
@@ -125,14 +157,31 @@
       font-family: 'Press Start 2P', monospace;
       font-size: 9px;
     }
-    .nav-button.active .nav-icon { background: var(--pink); }
-    .nav-count { margin-left: auto; color: #77616a; font-size: 18px; }
+
+    .nav-button.active .nav-icon {
+      background: var(--pink);
+    }
+
+    .nav-count {
+      margin-left: auto;
+      color: #77616a;
+      font-size: 18px;
+    }
 
     .content {
+      display: flex;
+      flex-direction: column;
       min-width: 0;
       padding: 22px;
       background: #665375;
+      overflow: hidden;
     }
+
+    .content-head,
+    .section-heading {
+      flex-shrink: 0;
+    }
+
     .content-head {
       display: flex;
       align-items: flex-start;
@@ -141,6 +190,7 @@
       flex-wrap: wrap;
       margin-bottom: 16px;
     }
+
     .content-title {
       margin: 0;
       color: var(--cream);
@@ -149,7 +199,12 @@
       line-height: 1.65;
       text-shadow: 3px 3px var(--ink);
     }
-    .content-subtitle { margin: 4px 0 0; color: #e1d5c4; }
+
+    .content-subtitle {
+      margin: 4px 0 0;
+      color: #e1d5c4;
+    }
+
     .search {
       min-width: min(330px, 100%);
       padding: 10px 13px;
@@ -159,7 +214,10 @@
       color: var(--ink);
       box-shadow: 4px 4px 0 var(--ink);
     }
-    .search:focus { border-color: var(--gold); }
+
+    .search:focus {
+      border-color: var(--gold);
+    }
 
     .section-heading {
       display: flex;
@@ -172,13 +230,27 @@
       font-size: 12px;
       line-height: 1.6;
     }
-    .result-count { color: var(--muted); font-family: VT323, monospace; font-size: 19px; }
+
+    .result-count {
+      color: var(--muted);
+      font-family: VT323, monospace;
+      font-size: 19px;
+    }
 
     .floor-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-auto-rows: max-content;
+      /* Keeps cards full size */
+      align-content: start;
       gap: 17px;
+      flex: 1;
+      overflow-y: auto;
+      /* Enables scrolling inside the floor grid area */
+      padding-right: 10px;
+      padding-bottom: 12px;
     }
+
     .floor-card {
       overflow: hidden;
       border: 4px solid var(--ink);
@@ -187,8 +259,22 @@
       box-shadow: var(--shadow);
       transition: transform .12s ease, box-shadow .12s ease;
     }
-    .floor-card:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--ink); }
-    .floor-card button { display: block; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; text-align: left; }
+
+    .floor-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0 var(--ink);
+    }
+
+    .floor-card button {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+    }
+
     .floor-art {
       position: relative;
       display: grid;
@@ -198,7 +284,15 @@
       background: #3c4775;
       border-bottom: 4px solid var(--ink);
     }
-    .floor-art img { display: block; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+
+    .floor-art img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      image-rendering: pixelated;
+    }
+
     .placeholder-art {
       position: absolute;
       inset: 0;
@@ -211,20 +305,48 @@
       text-align: center;
       text-shadow: 2px 2px var(--ink);
     }
+
     .placeholder-art::before {
       content: '';
       position: absolute;
       inset: 12% 8%;
-      border: 3px solid rgba(255,255,255,.45);
-      background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,220,122,.7) 18px 24px), repeating-linear-gradient(0deg, transparent 0 18px, rgba(255,220,122,.35) 18px 24px);
+      border: 3px solid rgba(255, 255, 255, .45);
+      background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(255, 220, 122, .7) 18px 24px),
+        repeating-linear-gradient(0deg, transparent 0 18px, rgba(255, 220, 122, .35) 18px 24px);
     }
-    .placeholder-art span { position: relative; }
-    .floor-info { padding: 11px 12px 12px; }
-    .floor-name { margin: 0 0 5px; font-family: 'Press Start 2P', monospace; font-size: 10px; line-height: 1.55; }
-    .floor-type { color: #6d6170; font-size: 18px; }
-    .view-hint { float: right; color: #b24953; font-size: 17px; }
 
-    .empty { padding: 28px; border: 3px dashed var(--cream); color: var(--cream); text-align: center; }
+    .placeholder-art span {
+      position: relative;
+    }
+
+    .floor-info {
+      padding: 11px 12px 12px;
+    }
+
+    .floor-name {
+      margin: 0 0 5px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    .floor-type {
+      color: #6d6170;
+      font-size: 18px;
+    }
+
+    .view-hint {
+      float: right;
+      color: #b24953;
+      font-size: 17px;
+    }
+
+    .empty {
+      padding: 28px;
+      border: 3px dashed var(--cream);
+      color: var(--cream);
+      text-align: center;
+    }
 
     .lightbox {
       position: fixed;
@@ -235,7 +357,11 @@
       padding: 24px;
       background: rgba(10, 11, 22, .88);
     }
-    .lightbox.open { display: grid; }
+
+    .lightbox.open {
+      display: grid;
+    }
+
     .lightbox-card {
       width: min(1000px, 100%);
       border: 5px solid var(--ink);
@@ -243,6 +369,7 @@
       color: var(--ink);
       box-shadow: 9px 9px 0 #05060c;
     }
+
     .lightbox-head {
       display: flex;
       justify-content: space-between;
@@ -252,7 +379,13 @@
       background: var(--navy);
       color: var(--cream);
     }
-    .lightbox-title { font-family: 'Press Start 2P', monospace; font-size: 13px; line-height: 1.5; }
+
+    .lightbox-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
     .close {
       padding: 4px 9px;
       border: 3px solid var(--ink);
@@ -261,86 +394,142 @@
       font-family: 'Press Start 2P', monospace;
       font-size: 11px;
     }
-    .lightbox-body { padding: 15px; }
-    .lightbox-body img { display: block; width: 100%; height: auto; image-rendering: pixelated; border: 4px solid var(--ink); background: #3c4775; }
-    .lightbox-note { margin: 10px 0 0; color: #6d6170; }
+
+    .lightbox-body {
+      padding: 15px;
+    }
+
+    .lightbox-body img {
+      display: block;
+      width: 100%;
+      height: auto;
+      image-rendering: pixelated;
+      border: 4px solid var(--ink);
+      background: #3c4775;
+    }
+
+    .lightbox-note {
+      margin: 10px 0 0;
+      color: #6d6170;
+    }
 
     @media (max-width: 780px) {
-      .app { padding: 10px; }
-      .tower-layout { grid-template-columns: 1fr; }
-      .elevator-panel { border-right: 0; border-bottom: 5px solid var(--ink); }
-      .nav-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-      .nav-button { margin: 0; }
-      .content { padding: 15px; }
-      .content-head { display: block; }
-      .search { width: 100%; margin-top: 14px; }
+      .app {
+        height: auto;
+        padding: 10px;
+      }
+
+      html,
+      body {
+        overflow: auto;
+      }
+
+      .tower-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .elevator-panel {
+        border-right: 0;
+        border-bottom: 5px solid var(--ink);
+      }
+
+      .nav-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .nav-button {
+        margin: 0;
+      }
+
+      .content {
+        padding: 15px;
+        overflow: visible;
+      }
+
+      .content-head {
+        display: block;
+      }
+
+      .search {
+        width: 100%;
+        margin-top: 14px;
+      }
+
+      .floor-grid {
+        overflow-y: visible;
+      }
     }
   </style>
 </head>
+
 <body>
   <main class="app">
     <section class="game-window">
-      <header class="statusbar">
-        <div class="logo pixel-title">TINY TOWER<br>VEGAS</div>
-      </header>
-
       <div class="tower-layout">
         <aside class="elevator-panel" aria-label="Tower navigation">
           <div class="panel-title">ELEVATOR<br>PANEL</div>
 
           <div class="nav-label">FLOORS</div>
-<div class="nav-row">
-  <button class="nav-button active" data-section="Casino">
-    <span class="nav-icon">C</span>
-    <span>Casino</span>
-    <span class="nav-count" data-count-for="Casino"></span>
-  </button>
+          <div class="nav-row">
+            <button class="nav-button active" data-section="All">
+              <span class="nav-icon">A</span>
+              <span>All</span>
+              <span class="nav-count" data-count-for="All"></span>
+            </button>
 
-  <button class="nav-button" data-section="Food">
-    <span class="nav-icon">F</span>
-    <span>Food</span>
-    <span class="nav-count" data-count-for="Food"></span>
-  </button>
+            <button class="nav-button" data-section="Casino">
+              <span class="nav-icon">C</span>
+              <span>Casino</span>
+              <span class="nav-count" data-count-for="Casino"></span>
+            </button>
 
-  <button class="nav-button" data-section="Retail">
-    <span class="nav-icon">R</span>
-    <span>Retail</span>
-    <span class="nav-count" data-count-for="Retail"></span>
-  </button>
+            <button class="nav-button" data-section="Food">
+              <span class="nav-icon">F</span>
+              <span>Food</span>
+              <span class="nav-count" data-count-for="Food"></span>
+            </button>
 
-  <button class="nav-button" data-section="Entertainment">
-    <span class="nav-icon">E</span>
-    <span>Entertainment</span>
-    <span class="nav-count" data-count-for="Entertainment"></span>
-  </button>
+            <button class="nav-button" data-section="Retail">
+              <span class="nav-icon">R</span>
+              <span>Retail</span>
+              <span class="nav-count" data-count-for="Retail"></span>
+            </button>
 
-  <button class="nav-button" data-section="Suite">
-    <span class="nav-icon">S</span>
-    <span>Suites</span>
-    <span class="nav-count" data-count-for="Suite"></span>
-  </button>
-</div>
+            <button class="nav-button" data-section="Entertainment">
+              <span class="nav-icon">E</span>
+              <span>Entertainment</span>
+              <span class="nav-count" data-count-for="Entertainment"></span>
+            </button>
 
-<div class="nav-label">TOWER</div>
-<div class="nav-row">
-  <button class="nav-button" data-section="Elevators">
-    <span class="nav-icon">↕</span>
-    <span>Elevators</span>
-    <span class="nav-count" data-count-for="Elevators"></span>
-  </button>
+            <button class="nav-button" data-section="Suite">
+              <span class="nav-icon">S</span>
+              <span>Suites</span>
+              <span class="nav-count" data-count-for="Suite"></span>
+            </button>
+          </div>
 
-  <button class="nav-button" data-section="Roofs">
-    <span class="nav-icon">R</span>
-    <span>Roofs</span>
-    <span class="nav-count" data-count-for="Roofs"></span>
-  </button>
+          <div class="nav-label">TOWER</div>
+          <div class="nav-row">
+            <button class="nav-button" data-section="Elevators">
+              <span class="nav-icon">↕</span>
+              <span>Elevators</span>
+              <span class="nav-count" data-count-for="Elevators"></span>
+            </button>
 
-  <button class="nav-button" data-section="Lobbies">
-    <span class="nav-icon">L</span>
-    <span>Lobbies</span>
-    <span class="nav-count" data-count-for="Lobbies"></span>
-  </button>
-</div>
+            <button class="nav-button" data-section="Roofs">
+              <span class="nav-icon">R</span>
+              <span>Roofs</span>
+              <span class="nav-count" data-count-for="Roofs"></span>
+            </button>
+
+            <button class="nav-button" data-section="Lobbies">
+              <span class="nav-icon">L</span>
+              <span>Lobbies</span>
+              <span class="nav-count" data-count-for="Lobbies"></span>
+            </button>
+          </div>
 
           <div class="panel-tip">SELECT A FLOOR<br>TO VIEW DETAILS</div>
         </aside>
@@ -377,23 +566,26 @@
     </div>
   </div>
 
-<script src="data/catalog.js"></script>
+  <script src="data/catalog.js"></script>
 
   <script>
     const floors = window.catalogItems || [];
 
     const sectionDescriptions = {
-  Casino: 'Browse the bright side of the tower.',
-  Food: 'Grab a bite between elevator rides.',
-  Retail: 'Shop the tower\'s most colorful floors.',
-  Entertainment: 'Keep the tower buzzing after dark.',
-  Suite: 'Stay awhile above the bright lights.',
-  Elevators: 'Every ride needs a signature look.',
-  Roofs: 'Top off your tower in style.',
-  Lobbies: 'Set the tone from the ground floor.'
-};
+      All: 'Browse every Casino, Food, Entertainment, and Retail floor.',
+      Casino: 'Browse the bright side of the tower.',
+      Food: 'Grab a bite between elevator rides.',
+      Retail: 'Shop the tower\'s most colorful floors.',
+      Entertainment: 'Keep the tower buzzing after dark.',
+      Suite: 'Stay awhile above the bright lights.',
+      Elevators: 'Every ride needs a signature look.',
+      Roofs: 'Top off your tower in style.',
+      Lobbies: 'Set the tone from the ground floor.'
+    };
 
-    let activeSection = 'Casino';
+    const ALL_FLOOR_CATEGORIES = new Set(['Casino', 'Food', 'Entertainment', 'Retail']);
+
+    let activeSection = 'All';
     const grid = document.getElementById('floorGrid');
     const search = document.getElementById('search');
     const title = document.getElementById('contentTitle');
@@ -406,32 +598,41 @@
     const lightboxNote = document.getElementById('lightboxNote');
 
     function imagePath(floor) {
-  return encodeURI(floor.image);
-}
+      return encodeURI(floor.image);
+    }
 
-function updateNavCounts() {
-  document.querySelectorAll('[data-count-for]').forEach(element => {
-    const category = element.dataset.countFor;
-    const total = floors.filter(item => item.category === category).length;
-    element.textContent = total;
-  });
-}
+    function updateNavCounts() {
+      document.querySelectorAll('[data-count-for]').forEach(element => {
+        const category = element.dataset.countFor;
+        const total = category === 'All'
+          ? floors.filter(item => ALL_FLOOR_CATEGORIES.has(item.category)).length
+          : floors.filter(item => item.category === category).length;
+        element.textContent = total;
+      });
+    }
 
     function render() {
       const query = search.value.trim().toLowerCase();
-      const matches = floors.filter(floor => floor.category === activeSection && floor.name.toLowerCase().includes(query));
-      const sectionTitles = {
-  Casino: 'CASINO FLOORS',
-  Food: 'FOOD FLOORS',
-  Retail: 'RETAIL FLOORS',
-  Entertainment: 'ENTERTAINMENT FLOORS',
-  Suite: 'SUITES',
-  Elevators: 'ELEVATORS',
-  Roofs: 'ROOFS',
-  Lobbies: 'LOBBIES'
-};
+      const matches = floors.filter(floor => {
+        const inSelectedSection = activeSection === 'All'
+          ? ALL_FLOOR_CATEGORIES.has(floor.category)
+          : floor.category === activeSection;
 
-title.textContent = sectionTitles[activeSection] || activeSection.toUpperCase();
+        return inSelectedSection && floor.name.toLowerCase().includes(query);
+      });
+      const sectionTitles = {
+        All: 'ALL FLOORS',
+        Casino: 'CASINO FLOORS',
+        Food: 'FOOD FLOORS',
+        Retail: 'RETAIL FLOORS',
+        Entertainment: 'ENTERTAINMENT FLOORS',
+        Suite: 'SUITES',
+        Elevators: 'ELEVATORS',
+        Roofs: 'ROOFS',
+        Lobbies: 'LOBBIES'
+      };
+
+      title.textContent = sectionTitles[activeSection] || activeSection.toUpperCase();
       subtitle.textContent = sectionDescriptions[activeSection];
       label.textContent = `${activeSection.toUpperCase()} CATALOG`;
       count.textContent = `${matches.length} ITEM${matches.length === 1 ? '' : 'S'}`;
@@ -496,4 +697,5 @@ title.textContent = sectionTitles[activeSection] || activeSection.toUpperCase();
     render();
   </script>
 </body>
+
 </html>
